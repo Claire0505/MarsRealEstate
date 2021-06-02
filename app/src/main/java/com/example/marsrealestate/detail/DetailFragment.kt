@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.marsrealestate.R
+import com.example.marsrealestate.databinding.FragmentDetailBinding
 
 class DetailFragment : Fragment() {
 
@@ -13,7 +14,9 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val binding = FragmentDetailBinding.inflate(inflater)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        return binding.root
     }
 }
