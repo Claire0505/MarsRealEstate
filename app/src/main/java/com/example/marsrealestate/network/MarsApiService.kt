@@ -1,8 +1,10 @@
 package com.example.marsrealestate.network
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
 /**
@@ -19,8 +21,15 @@ import retrofit2.http.GET
 
 private const val BASE_URL = "https://android-kotlin-fun-mars-server.appspot.com/"
 
+// moshi使用 Moshi 構建器創建一個對象。為了讓 Moshi 的註解與 Kotlin 一起正常工作，
+// 添加KotlinJsonAdapterFactory，然後調用build()。
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
+
+// 將 Retrofit 構建器更改為使用MoshiConverterFactory代替ScalarConverterFactory，並傳入上面創建的moshi。
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
 
@@ -30,10 +39,12 @@ private val retrofit = Retrofit.Builder()
  *  getProperties()調用該方法時，Retrofit 將端點附加realestate到基本 URL [BASE_URL]
  * ，並創建一個Call對象。該對Call像用於啟動請求。
  */
+
+// 更新MarsApiService接口以讓 Retrofit 返回一個MarsProperty對象列表，而不是返回Call<String>.
 interface MarsApiService {
     @GET("realestate")
     fun getProperties():
-        Call<String>
+            Call<List<MarsProperty>>
 }
 
 /**

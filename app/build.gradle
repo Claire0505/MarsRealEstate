@@ -62,5 +62,10 @@ dependencies {
     // 應用程序需要與服務器建立網絡連接，將使用名為Retrofit的 REST 客戶端庫 來建立此連接。
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     // 針對 Retrofit 標量轉換器。此轉換器使 Retrofit 能夠將 JSON 結果作為String. 這兩個庫協同工作。
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    // implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // Moshi 它是一個 Android JSON 解析器，可將 JSON 字符串轉換為 Kotlin 對象。
+    // Retrofit 有一個可與 Moshi 配合使用的轉換器。
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 }

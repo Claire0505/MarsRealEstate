@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.marsrealestate.network.MarsAPi
+import com.example.marsrealestate.network.MarsProperty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,8 +19,8 @@ class OverviewViewModel : ViewModel() {
 
     // The external immutable LiveData for the response String
     // response 是 LiveData並且我們已經為綁定變量設置了生命週期，對它的任何更改都會更新應用程序 UI。
-    val response : LiveData<String>
-    get() = _response
+    val response: LiveData<String>
+        get() = _response
 
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
@@ -37,12 +38,15 @@ class OverviewViewModel : ViewModel() {
      */
     private fun getMarsRealEstateProperties() {
         MarsAPi.retrofitService.getProperties().enqueue(
-            object: Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    _response.value = response.body()
+            object : Callback<List<MarsProperty>> {  // 將參數更改為enqueue()fromCallback<String>
+                override fun onResponse(
+                    call: Call<List<MarsProperty>>,
+                    response: Response<List<MarsProperty>>
+                ) {
+                    _response.value = "Success: ${response.body()?.size} Mars properties retrieved"
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<List<MarsProperty>>, t: Throwable) {
                     _response.value = "Failure: " + t.message
                 }
 
