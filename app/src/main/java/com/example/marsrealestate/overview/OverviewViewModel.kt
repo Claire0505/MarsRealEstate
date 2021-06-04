@@ -13,6 +13,7 @@ class OverviewViewModel : ViewModel() {
     private val _response = MutableLiveData<String>()
 
     // The external immutable LiveData for the response String
+    // response 是 LiveData並且我們已經為綁定變量設置了生命週期，對它的任何更改都會更新應用程序 UI。
     val response : LiveData<String>
     get() = _response
 
