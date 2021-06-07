@@ -3,8 +3,10 @@ package com.example.marsrealestate.overview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.marsrealestate.network.MarsAPi
 import com.example.marsrealestate.network.MarsProperty
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,26 +33,22 @@ class OverviewViewModel : ViewModel() {
 
     /**
      * Sets the value of the status LiveData to the Mars API status.
-     * 將調用 Retrofit 服務並處理返回的 JSON 字符串的方法，導入retrofit2.Callback
-     * 返回一個Call對象。然後您可以調用該enqueue()對像以在後台線程上啟動網絡請求。
-     *
+     *  ViewModelScope是為ViewModel應用程序中的每個定義的內置協程範圍。
+     *  如果ViewModel清除了 ，則在此範圍內啟動的任何協程都會自動取消。
      * _response是LiveData，它決定了在文本視圖中顯示的字符串中。每個狀態都需要更新_response LiveData.
      */
     private fun getMarsRealEstateProperties() {
-        MarsAPi.retrofitService.getProperties().enqueue(
-            object : Callback<List<MarsProperty>> {  // 將參數更改為enqueue()fromCallback<String>
-                override fun onResponse(
-                    call: Call<List<MarsProperty>>,
-                    response: Response<List<MarsProperty>>
-                ) {
-                    _response.value = "Success: ${response.body()?.size} Mars properties retrieved"
-                }
+      viewModelScope.launch {
+          try {
+              // 調用getProperties()從MarsApi服務創建並啟動在後台線程網絡通話。
+              val listResult = MarsAPi.retrofitService.getProperties()
+              _response.value = "Success: ${listResult.size} Mars properties retrieved"
 
-                override fun onFailure(call: Call<List<MarsProperty>>, t: Throwable) {
-                    _response.value = "Failure: " + t.message
-                }
+          }catch (e: Exception){
+              _response.value = "Failure: ${e.message}"
+          }
 
-            })
+      }
     }
 
 }

@@ -43,8 +43,7 @@ private val retrofit = Retrofit.Builder()
 // 更新MarsApiService接口以讓 Retrofit 返回一個MarsProperty對象列表，而不是返回Call<String>.
 interface MarsApiService {
     @GET("realestate")
-    fun getProperties():
-            Call<List<MarsProperty>>
+    suspend fun getProperties(): List<MarsProperty>
 }
 
 /**
