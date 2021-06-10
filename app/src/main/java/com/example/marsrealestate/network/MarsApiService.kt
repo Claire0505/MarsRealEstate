@@ -5,6 +5,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * Retrofit 至少需要兩個可用的東西來構建 Web 服務 API：Web 服務的基本 URI 和轉換器工廠。
@@ -17,6 +18,13 @@ import retrofit2.http.GET
  *  在調用 Retrofit 構建器的正下方，定義一個接口，該接口定義 Retrofit 如何使用 HTTP 請求與 Web 服務器通信。
  *  在MarsApiService接口下方，定義一個公共對象，調用它MarsApi來初始化 Retrofit 服務。這是在創建服務對象時使用的標準 Kotlin 代碼模式。
  */
+
+// 創建一個enum調用MarsApiFilter來定義與 Web 服務期望的查詢值匹配的常量。
+enum class MarsApiFilter (val value: String){
+    SHOW_RENT("rent"),
+    SHOW_BUY("buy"),
+    SHOW_ALL("all")
+}
 
 private const val BASE_URL = "https://android-kotlin-fun-mars-server.appspot.com/"
 
@@ -40,9 +48,11 @@ private val retrofit = Retrofit.Builder()
  */
 
 // 更新MarsApiService接口以讓 Retrofit 返回一個MarsProperty對象列表，而不是返回Call<String>.
+// 該@Query註解告訴的getProperties()方法，以與過濾器選項Web服務請求。
+// 每次getProperties()調用時，請求 URL 都會包含?filter=type指示 Web 服務響應與該查詢匹配的結果的部分。
 interface MarsApiService {
     @GET("realestate")
-    suspend fun getProperties(): List<MarsProperty>
+    suspend fun getProperties(@Query("filter") type: String): List<MarsProperty>
 }
 
 /**

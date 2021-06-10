@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marsrealestate.network.MarsAPi
+import com.example.marsrealestate.network.MarsApiFilter
 import com.example.marsrealestate.network.MarsProperty
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,7 @@ class OverviewViewModel : ViewModel() {
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
      */
     init {
-        getMarsRealEstateProperties()
+        getMarsRealEstateProperties(MarsApiFilter.SHOW_ALL)
     }
 
     /**
@@ -40,10 +41,10 @@ class OverviewViewModel : ViewModel() {
      *  如果ViewModel清除了 ，則在此範圍內啟動的任何協程都會自動取消。
      * _response是LiveData，它決定了在文本視圖中顯示的字符串中。每個狀態都需要更新_response LiveData.
      */
-    private fun getMarsRealEstateProperties() {
+    private fun getMarsRealEstateProperties(filter: MarsApiFilter) {
       viewModelScope.launch {
           try {
-              _properties.value = MarsAPi.retrofitService.getProperties()
+              _properties.value = MarsAPi.retrofitService.getProperties(filter.value)
               _status.value = MarsApiStatus.DONE
           } catch (e: Exception) {
               _status.value = MarsApiStatus.ERROR
@@ -51,6 +52,15 @@ class OverviewViewModel : ViewModel() {
               _properties.value = ArrayList()
           }
       }
+    }
+
+    /**
+     * Updates the data set filter for the web services by querying the data with the new filter
+     * by calling [getMarsRealEstateProperties]
+     * @param filter the [MarsApiFilter] that is sent as part of the web server request
+     */
+    fun updateFilter(filter: MarsApiFilter){
+        getMarsRealEstateProperties(filter)
     }
 
 }
