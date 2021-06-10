@@ -7,22 +7,25 @@ import androidx.lifecycle.viewModelScope
 import com.example.marsrealestate.network.MarsAPi
 import com.example.marsrealestate.network.MarsProperty
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
+// 向視圖模型添加狀態
+enum class MarsApiStatus { LOADING, ERROR, DONE}
+
 class OverviewViewModel : ViewModel() {
 
-    // The internal MutableLiveData String that stores the most recent response
-    private val _response = MutableLiveData<String>()
+    private val _status = MutableLiveData<MarsApiStatus>()
+    val status : LiveData<MarsApiStatus>
+    get() = _status
 
-    // The external immutable LiveData for the response String
-    // response 是 LiveData並且我們已經為綁定變量設置了生命週期，對它的任何更改都會更新應用程序 UI。
-    val response: LiveData<String>
-        get() = _response
+    // 在內部，我們使用 MutableLiveData，因為我們將更新 MarsProperty 的列表，使用新值
+    // properties 是 LiveData並且我們已經為綁定變量設置了生命週期，對它的任何更改都會更新應用程序 UI。
+    private val _properties = MutableLiveData<List<MarsProperty>>()
+    val properties : LiveData<List<MarsProperty>>
+    get() = _properties
 
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
@@ -40,14 +43,13 @@ class OverviewViewModel : ViewModel() {
     private fun getMarsRealEstateProperties() {
       viewModelScope.launch {
           try {
-              // 調用getProperties()從MarsApi服務創建並啟動在後台線程網絡通話。
-              val listResult = MarsAPi.retrofitService.getProperties()
-              _response.value = "Success: ${listResult.size} Mars properties retrieved"
-
-          }catch (e: Exception){
-              _response.value = "Failure: ${e.message}"
+              _properties.value = MarsAPi.retrofitService.getProperties()
+              _status.value = MarsApiStatus.DONE
+          } catch (e: Exception) {
+              _status.value = MarsApiStatus.ERROR
+              // 設置_properties LiveData為空列表。這將清除RecyclerView.
+              _properties.value = ArrayList()
           }
-
       }
     }
 

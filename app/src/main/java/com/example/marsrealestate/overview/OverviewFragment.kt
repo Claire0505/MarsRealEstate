@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.marsrealestate.R
 import com.example.marsrealestate.databinding.FragmentOverviewBinding
 
+
 class OverviewFragment : Fragment() {
 
     /**
@@ -25,7 +26,8 @@ class OverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentOverviewBinding.inflate(inflater)
+
+       val binding = FragmentOverviewBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         // 已經設置了生命週期所有者，任何LiveData在數據綁定中使用的都將自動觀察到任何更改，並且 UI 將相應地更新。
@@ -33,6 +35,11 @@ class OverviewFragment : Fragment() {
 
         // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
+
+        // Sets the adapter of the photosGrid RecyclerView
+        binding.photosGrid.adapter = PhotoGridAdapter()
+
+        setHasOptionsMenu(true)
 
         // Inflate the layout for this fragment
         return binding.root

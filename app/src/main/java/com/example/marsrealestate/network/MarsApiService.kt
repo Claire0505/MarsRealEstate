@@ -2,7 +2,6 @@ package com.example.marsrealestate.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -49,8 +48,8 @@ interface MarsApiService {
 /**
  * Retrofit.create()方法使用MarsApiService interface 創建 Retrofit 服務本身。
  * 由於此調用的計算量很大，因此您可以延遲初始化 Retrofit 服務，需要使用時才會用到
- * 由於應用程序只需要一個 Retrofit 服務實例，您可以使用一個名為 的公共對象將該服務公開給應用程序的其餘部分[MarsApi]
- * 一旦所有設置完成，每次您的應用程序調用 時 [MarsApi.retrofitService]，它都會獲得一個實現MarsApiService.
+ * 由於應用程序只需要一個 Retrofit 服務實例，您可以使用一個名為 的公共對象將該服務公開給應用程序的其餘部分 MarsApi
+ * 一旦所有設置完成，每次您的應用程序調用 時 MarsApi.retrofitService，它都會獲得一個實現MarsApiService.
  *
  *  “延遲實例化 by lazy”是指故意延遲對象創建，直到您真正需要該對像以避免不必要的計算或使用其他計算資源。
  */

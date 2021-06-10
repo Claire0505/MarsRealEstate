@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    // 可以在 Kotlin 項目中使用諸如 Dagger 或 Data Binding 之類的庫。
+    id 'kotlin-kapt'
 }
 
 android {
@@ -29,6 +31,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     // enable dataBinding
@@ -68,4 +71,9 @@ dependencies {
     // Moshi 它是一個 Android JSON 解析器，可將 JSON 字符串轉換為 Kotlin 對象。
     // Retrofit 有一個可與 Moshi 配合使用的轉換器。
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+
+    // Glide 緩衝、解碼和緩存您的圖像。
+    // 1.要加載和顯示的圖像的 URL。 2.ImageView實際顯示該圖像的對象。
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 }
