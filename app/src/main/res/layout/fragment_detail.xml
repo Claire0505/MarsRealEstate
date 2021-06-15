@@ -33,6 +33,7 @@
 
             <TextView
                 android:id="@+id/property_type_text"
+                android:text="@{viewModel.displayPropertyType}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -44,6 +45,7 @@
 
             <TextView
                 android:id="@+id/price_value_text"
+                android:text="@{viewModel.displayPropertyPrice}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
