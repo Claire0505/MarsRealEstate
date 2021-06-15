@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".detail.DetailFragment">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.marsrealestate.detail.DetailViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,7 +28,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic"
-                android:contentDescription="@string/detail_image" />
+                android:contentDescription="@string/detail_image"
+                app:imageUrl="@{viewModel.selectedProperty.imgSrcUrl}"/>
 
             <TextView
                 android:id="@+id/property_type_text"

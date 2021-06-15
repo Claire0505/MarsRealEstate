@@ -3,6 +3,9 @@ plugins {
     id 'kotlin-android'
     // 可以在 Kotlin 項目中使用諸如 Dagger 或 Data Binding 之類的庫。
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs'
+    // 實現Parcelable (序列化) 讓(object)對象的數據可以在片段或活動之間傳遞。
+    id 'kotlin-parcelize'
 }
 
 android {
